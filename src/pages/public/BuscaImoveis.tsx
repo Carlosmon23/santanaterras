@@ -17,7 +17,7 @@ import { useImovelStore } from '../../stores/imovelStore';
 import { ImovelCard } from '../../components/imovel/ImovelCard';
 import { Button } from '../../components/ui/Button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
-import { FiltrosBusca, Comodidade, Imovel, CategoriaImovel } from '../../types/imovel';
+import { FiltrosBusca, Comodidade, Imovel, CategoriaImovel, TipoImovel } from '../../types/imovel';
 import { formatarPreco, formatarArea } from '../../utils/helpers';
 import { categoriasImovel, comodidadesDisponiveis, cidadesDisponiveis } from '@/constants/imovelOptions';
 

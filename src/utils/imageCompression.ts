@@ -124,9 +124,8 @@ export async function compressImage(
       initialQuality: quality,
     };
     
-    // A biblioteca pode exportar como default ou named export
-    const compressFn = imageCompression.default || imageCompression;
-    const compressedFile = await compressFn(file, compressionOptions);
+    // A biblioteca exporta como default
+    const compressedFile = await imageCompression.default(file, compressionOptions);
     
     return compressedFile;
   } catch (error) {

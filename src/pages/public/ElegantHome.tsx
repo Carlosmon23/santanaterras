@@ -7,7 +7,7 @@ import { FloatingSearchBar } from '@/components/layout/FloatingSearchBar';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Award, Shield, TrendingUp, Users, Home } from 'lucide-react';
 import { Imovel, CategoriaImovel } from '@/types/imovel';
-import { categoriasImovel } from '@/constants/imovelOptions';
+import { categoriasImovel, obterCategoria } from '@/constants/imovelOptions';
 import { cn } from '@/utils/helpers';
 import { heroImages } from '@/config/heroImages';
 
@@ -60,7 +60,7 @@ export const ElegantHome: React.FC = () => {
     } else {
       // Filtrar por categoria
       setFilteredImoveis(imoveisRecentes.filter(imovel => {
-        const categoriaImovel = imovel.categoria || (imovel.tipo === 'Sítio' || imovel.tipo === 'Chácara' || imovel.tipo === 'Fazenda' || imovel.tipo === 'Terreno' ? 'Rural' : 'Urbano');
+        const categoriaImovel = imovel.categoria || obterCategoria(imovel.tipo);
         return categoriaImovel === selectedCategory;
       }));
     }
