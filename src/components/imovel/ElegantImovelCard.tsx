@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Bed, Bath, Square, Heart, Eye } from 'lucide-react';
 import { Imovel } from '@/types/imovel';
-import { formatarPreco, formatarArea, gerarSlug } from '@/utils/helpers';
+import { formatarPreco, formatarArea, gerarSlug, isValidPrecoExibicao } from '@/utils/helpers';
 import { cn } from '@/utils/helpers';
 
 interface ElegantImovelCardProps {
@@ -116,7 +116,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <div className="text-2xl font-bold text-gray-900">
-              {(imovel.precoExibicao && imovel.precoExibicao !== 'NaN' && imovel.precoExibicao !== 'R$ NaN')
+              {isValidPrecoExibicao(imovel.precoExibicao)
                 ? imovel.precoExibicao
                 : formatarPreco(imovel.preco ?? null)}
             </div>

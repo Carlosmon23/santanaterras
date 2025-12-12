@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Imovel, FiltrosBusca } from '../types/imovel';
 import { supabase } from '@/lib/supabaseClient';
-import { formatarPreco } from '@/utils/helpers';
+import { formatarPreco, isValidPrecoExibicao } from '@/utils/helpers';
 import { obterCategoria } from '@/constants/imovelOptions';
 
 interface ImovelStore {
@@ -41,7 +41,7 @@ const mapRowToImovel = (row: any): Imovel => {
     fotos: Array.isArray(row.fotos) ? row.fotos : [],
     fotoCapa: row.fotoCapa || '',
     preco: row.preco ?? null,
-    precoExibicao: (row.precoExibicao && row.precoExibicao !== 'NaN' && row.precoExibicao !== 'R$ NaN') 
+    precoExibicao: isValidPrecoExibicao(row.precoExibicao)
       ? row.precoExibicao 
       : formatarPreco(row.preco ?? null),
     visualizacoes: typeof row.visualizacoes === 'number' ? row.visualizacoes : 0,
@@ -151,7 +151,7 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         categoria: categoria,
         status: imovel.status,
         preco: imovel.preco,
-        precoExibicao: (imovel.precoExibicao && imovel.precoExibicao !== 'NaN' && imovel.precoExibicao !== 'R$ NaN')
+        precoExibicao: isValidPrecoExibicao(imovel.precoExibicao)
           ? imovel.precoExibicao
           : formatarPreco(imovel.preco ?? null),
         localizacao: imovel.localizacao || { cidade: '', bairro: '', estado: '' },

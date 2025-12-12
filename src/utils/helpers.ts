@@ -19,6 +19,21 @@ export function formatarPreco(preco: number | null | undefined): string {
   }).format(preco);
 }
 
+/**
+ * Valida se o precoExibicao é válido (não é NaN ou variações)
+ */
+export function isValidPrecoExibicao(precoExibicao: string | null | undefined): boolean {
+  if (!precoExibicao) return false;
+  const normalized = precoExibicao.trim().toLowerCase();
+  return !(
+    normalized === 'nan' ||
+    normalized === 'r$ nan' ||
+    normalized.includes('nan') ||
+    normalized === 'undefined' ||
+    normalized === 'null'
+  );
+}
+
 export function formatarArea(area: number): string {
   if (area >= 10000) {
     // Converter para hectares
