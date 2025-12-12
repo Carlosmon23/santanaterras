@@ -116,7 +116,9 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
         <div className="flex items-center justify-between">
           <div>
             <div className="text-2xl font-bold text-gray-900">
-              {imovel.precoExibicao}
+              {(imovel.precoExibicao && imovel.precoExibicao !== 'NaN' && imovel.precoExibicao !== 'R$ NaN')
+                ? imovel.precoExibicao
+                : formatarPreco(imovel.preco ?? null)}
             </div>
             {imovel.preco && (
               <div className="text-xs text-gray-500 mt-1">

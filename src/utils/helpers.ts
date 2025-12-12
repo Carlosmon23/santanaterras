@@ -5,8 +5,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatarPreco(preco: number | null): string {
-  if (preco === null) return 'Sob Consulta';
+export function formatarPreco(preco: number | null | undefined): string {
+  // Tratar null, undefined, NaN e valores inválidos
+  if (preco === null || preco === undefined || isNaN(preco) || preco <= 0) {
+    return 'Sob Consulta';
+  }
   
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',

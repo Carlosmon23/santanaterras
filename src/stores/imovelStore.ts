@@ -41,7 +41,9 @@ const mapRowToImovel = (row: any): Imovel => {
     fotos: Array.isArray(row.fotos) ? row.fotos : [],
     fotoCapa: row.fotoCapa || '',
     preco: row.preco ?? null,
-    precoExibicao: row.precoExibicao || formatarPreco(row.preco ?? null),
+    precoExibicao: (row.precoExibicao && row.precoExibicao !== 'NaN' && row.precoExibicao !== 'R$ NaN') 
+      ? row.precoExibicao 
+      : formatarPreco(row.preco ?? null),
     visualizacoes: typeof row.visualizacoes === 'number' ? row.visualizacoes : 0,
     destaque: Boolean(row.destaque),
     slug: row.slug || '',
@@ -149,7 +151,9 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         categoria: categoria,
         status: imovel.status,
         preco: imovel.preco,
-        precoExibicao: imovel.precoExibicao || formatarPreco(imovel.preco ?? null),
+        precoExibicao: (imovel.precoExibicao && imovel.precoExibicao !== 'NaN' && imovel.precoExibicao !== 'R$ NaN')
+          ? imovel.precoExibicao
+          : formatarPreco(imovel.preco ?? null),
         localizacao: imovel.localizacao || { cidade: '', bairro: '', estado: '' },
         areaTotal: areaTotalValue, // O Supabase vai mapear automaticamente para a coluna correta
         areaUtil: imovel.areaUtil || null,
