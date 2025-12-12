@@ -2,13 +2,14 @@
  * local server entry file, for local development
  */
 import app from './app.js';
+import type { Application } from 'express';
 
 /**
  * start server with port
  */
 const PORT = process.env.PORT || 3002;
 
-const server = app.listen(PORT, () => {
+const server = (app as Application).listen(PORT, () => {
   console.log(`Server ready on port ${PORT}`);
 });
 
