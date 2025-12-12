@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -38,15 +38,48 @@ export const ImovelDetalhes: React.FC = () => {
     mensagem: ''
   });
   
+  // Usar useRef para rastrear se já incrementou as visualizações para este slug
+  const hasIncrementedViews = useRef<string | null>(null);
+  
+  // Carregar o imóvel quando o slug mudar
   useEffect(() => {
-    if (slug) {
-      const imovel = imoveis.find(i => i.slug === slug);
-      if (imovel) {
-        setImovelSelecionado(imovel);
-        saveImovel({ ...imovel, visualizacoes: (imovel.visualizacoes || 0) + 1 });
+    if (!slug) return;
+    
+    // Reset do ref quando o slug mudar
+    if (hasIncrementedViews.current !== slug) {
+      hasIncrementedViews.current = null;
+    }
+    
+    const imovel = imoveis.find(i => i.slug === slug);
+    if (imovel) {
+      setImovelSelecionado(imovel);
+      
+      // Incrementar visualizações apenas uma vez por slug (quando a página é carregada pela primeira vez)
+      if (hasIncrementedViews.current === null) {
+        hasIncrementedViews.current = slug;
+        // Usar o valor atual do imóvel antes de incrementar
+        const currentViews = imovel.visualizacoes || 0;
+        saveImovel({ ...imovel, visualizacoes: currentViews + 1 });
       }
     }
-  }, [slug, imoveis, setImovelSelecionado]);
+  }, [slug]); // Apenas slug como dependência - buscar imóvel quando slug mudar
+  
+  // Buscar imóvel quando a lista de imóveis for carregada (se ainda não foi encontrado)
+  useEffect(() => {
+    if (!slug || imovelSelecionado || imoveis.length === 0) return;
+    
+    const imovel = imoveis.find(i => i.slug === slug);
+    if (imovel) {
+      setImovelSelecionado(imovel);
+      
+      // Incrementar visualizações apenas uma vez
+      if (hasIncrementedViews.current === null) {
+        hasIncrementedViews.current = slug;
+        const currentViews = imovel.visualizacoes || 0;
+        saveImovel({ ...imovel, visualizacoes: currentViews + 1 });
+      }
+    }
+  }, [imoveis.length, slug, imovelSelecionado]); // Apenas quando a lista for carregada
   
   if (!imovelSelecionado) {
     return (
