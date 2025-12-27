@@ -17,3 +17,4 @@ FROM information_schema.columns
 WHERE table_name = 'imoveis'
 ORDER BY column_name;
 
+

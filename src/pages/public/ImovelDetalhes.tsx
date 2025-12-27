@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  MapPin, 
-  Bed, 
-  Bath, 
-  Square, 
-  Phone, 
-  Mail, 
+import {
+  ArrowLeft,
+  MapPin,
+  Bed,
+  Bath,
+  Square,
+  Phone,
+  Mail,
   Calendar,
   Star,
   Heart,
@@ -37,23 +37,23 @@ export const ImovelDetalhes: React.FC = () => {
     telefone: '',
     mensagem: ''
   });
-  
+
   // Usar useRef para rastrear se já incrementou as visualizações para este slug
   const hasIncrementedViews = useRef<string | null>(null);
-  
+
   // Carregar o imóvel quando o slug mudar
   useEffect(() => {
     if (!slug) return;
-    
+
     // Reset do ref quando o slug mudar
     if (hasIncrementedViews.current !== slug) {
       hasIncrementedViews.current = null;
     }
-    
+
     const imovel = imoveis.find(i => i.slug === slug);
     if (imovel) {
       setImovelSelecionado(imovel);
-      
+
       // Incrementar visualizações apenas uma vez por slug (quando a página é carregada pela primeira vez)
       if (hasIncrementedViews.current === null) {
         hasIncrementedViews.current = slug;
@@ -63,15 +63,15 @@ export const ImovelDetalhes: React.FC = () => {
       }
     }
   }, [slug]); // Apenas slug como dependência - buscar imóvel quando slug mudar
-  
+
   // Buscar imóvel quando a lista de imóveis for carregada (se ainda não foi encontrado)
   useEffect(() => {
     if (!slug || imovelSelecionado || imoveis.length === 0) return;
-    
+
     const imovel = imoveis.find(i => i.slug === slug);
     if (imovel) {
       setImovelSelecionado(imovel);
-      
+
       // Incrementar visualizações apenas uma vez
       if (hasIncrementedViews.current === null) {
         hasIncrementedViews.current = slug;
@@ -80,7 +80,7 @@ export const ImovelDetalhes: React.FC = () => {
       }
     }
   }, [imoveis.length, slug, imovelSelecionado]); // Apenas quando a lista for carregada
-  
+
   if (!imovelSelecionado) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -95,9 +95,9 @@ export const ImovelDetalhes: React.FC = () => {
       </div>
     );
   }
-  
+
   const imovel = imovelSelecionado;
-  
+
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await addLead({
@@ -112,15 +112,15 @@ export const ImovelDetalhes: React.FC = () => {
     setShowContactForm(false);
     setContactForm({ nome: '', email: '', telefone: '', mensagem: '' });
   };
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <ElegantHeader />
-      
+
       {/* Spacer para o header fixo */}
       <div className="h-20"></div>
-      
+
       {/* Breadcrumb */}
       <div className="bg-white border-b">
         <div className="container mx-auto px-4 py-4">
@@ -137,7 +137,7 @@ export const ImovelDetalhes: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -165,7 +165,7 @@ export const ImovelDetalhes: React.FC = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 {/* Thumbnail Gallery */}
                 <div className="p-4">
                   <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
@@ -173,11 +173,10 @@ export const ImovelDetalhes: React.FC = () => {
                       <button
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
-                        className={`relative overflow-hidden rounded-lg ${
-                          currentImageIndex === index 
-                            ? 'ring-2 ring-red-600' 
+                        className={`relative overflow-hidden rounded-lg ${currentImageIndex === index
+                            ? 'ring-2 ring-red-600'
                             : 'hover:opacity-80'
-                        }`}
+                          }`}
                       >
                         <img
                           src={foto}
@@ -190,7 +189,7 @@ export const ImovelDetalhes: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Property Info */}
             <Card>
               <CardHeader>
@@ -234,12 +233,12 @@ export const ImovelDetalhes: React.FC = () => {
                     </div>
                     <div className="text-center p-4 bg-gray-50 rounded-lg">
                       <Square className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                      <div className="text-lg font-bold text-gray-900">{formatarArea(imovel.areaTotal)}</div>
+                      <div className="text-lg font-bold text-gray-900">{formatarArea(imovel.areaTotal, imovel.unidadeArea)}</div>
                       <div className="text-sm text-gray-600">Área Total</div>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Additional Features */}
                 {imovel.areaUtil && (
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -251,7 +250,7 @@ export const ImovelDetalhes: React.FC = () => {
                     </div>
                   </div>
                 )}
-                
+
                 {imovel.caracteristicas.vagasGaragem && imovel.caracteristicas.vagasGaragem > 0 && (
                   <div className="flex items-center gap-2">
                     <Car className="w-5 h-5 text-gray-400" />
@@ -260,7 +259,7 @@ export const ImovelDetalhes: React.FC = () => {
                     </span>
                   </div>
                 )}
-                
+
                 {/* Amenities */}
                 {imovel.comodidades.length > 0 && (
                   <div>
@@ -275,7 +274,7 @@ export const ImovelDetalhes: React.FC = () => {
                     </div>
                   </div>
                 )}
-                
+
                 {/* Description */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">Descrição</h3>
@@ -286,7 +285,7 @@ export const ImovelDetalhes: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Card */}
@@ -302,15 +301,15 @@ export const ImovelDetalhes: React.FC = () => {
                   <p className="text-sm text-gray-600 mb-4">
                     Tem interesse neste imóvel? Entre em contato conosco!
                   </p>
-                  
-                  <Button 
+
+                  <Button
                     className="w-full mb-3"
                     onClick={() => setShowContactForm(!showContactForm)}
                   >
                     <Phone className="w-4 h-4 mr-2" />
                     Tenho Interesse
                   </Button>
-                  
+
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center gap-2">
                       <Phone className="w-4 h-4 text-gray-400" />
@@ -326,7 +325,7 @@ export const ImovelDetalhes: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 {showContactForm && (
                   <form onSubmit={handleContactSubmit} className="space-y-3 pt-4 border-t">
                     <Input
@@ -364,7 +363,7 @@ export const ImovelDetalhes: React.FC = () => {
                 )}
               </CardContent>
             </Card>
-            
+
             {/* Property Info Card */}
             <Card>
               <CardHeader>
@@ -381,7 +380,7 @@ export const ImovelDetalhes: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Área Total:</span>
-                  <span className="font-medium">{formatarArea(imovel.areaTotal)}</span>
+                  <span className="font-medium">{formatarArea(imovel.areaTotal, imovel.unidadeArea)}</span>
                 </div>
                 {imovel.areaUtil && (
                   <div className="flex justify-between">
@@ -399,7 +398,7 @@ export const ImovelDetalhes: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Share Buttons */}
             <div className="flex gap-2">
               <Button variant="outline" className="flex-1">

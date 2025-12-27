@@ -10,7 +10,7 @@ export function formatarPreco(preco: number | null | undefined): string {
   if (preco === null || preco === undefined || isNaN(preco) || preco <= 0) {
     return 'Sob Consulta';
   }
-  
+
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
@@ -34,12 +34,43 @@ export function isValidPrecoExibicao(precoExibicao: string | null | undefined): 
   );
 }
 
-export function formatarArea(area: number): string {
-  if (area >= 10000) {
-    // Converter para hectares
-    const hectares = area / 10000;
-    return `${hectares} ha`;
+import { UnidadeArea } from '@/types/imovel';
+
+const ALQUEIRE_M2 = 24200; // Alqueire Paulista
+const HECTARE_M2 = 10000;
+
+export function formatarArea(area: number, unidade?: UnidadeArea): string {
+  if (unidade === 'hectare') {
+    const hectares = area / HECTARE_M2;
+    // Mostrar até 4 casas decimais se necessário, removendo zeros à direita
+    return `${hectares.toLocaleString('pt-BR', { maximumFractionDigits: 4 })} ha`;
   }
+
+  if (unidade === 'alqueire') {
+    const alqueires = area / ALQUEIRE_M2;
+    return `${alqueires.toLocaleString('pt-BR', { maximumFractionDigits: 4 })} alqueires`;
+  }
+
+  // Comportamento padrão (m² ou fallback legado)
+  if (unidade === 'm²' || !unidade) {
+    // Se não tiver unidade especificada, mantém o comportamento antigo de converter para ha se for muito grande?
+    // O usuário pediu "que seja hectares se eu escolhi hectares".
+    // Se ele não escolheu (legado), talvez manter o auto-format?
+    // Mas se ele escolheu m2 explicitamente, deve mostrar m2 mesmo que seja enorme.
+
+    if (unidade === 'm²') {
+      return `${area.toLocaleString('pt-BR')} m²`;
+    }
+
+    // Fallback para comportamento antigo (sem unidade definida)
+    if (area >= 10000) {
+      // Converter para hectares
+      const hectares = area / 10000;
+      return `${hectares.toLocaleString('pt-BR', { maximumFractionDigits: 2 })} ha`;
+    }
+    return `${area.toLocaleString('pt-BR')} m²`;
+  }
+
   return `${area.toLocaleString('pt-BR')} m²`;
 }
 

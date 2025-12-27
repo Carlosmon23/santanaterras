@@ -48,3 +48,4 @@ EXECUTE FUNCTION update_updated_at_column();
 -- UPDATE imoveis SET titulo = titulo WHERE id = (SELECT id FROM imoveis LIMIT 1);
 -- SELECT "dataAtualizacao" FROM imoveis LIMIT 1;
 
+

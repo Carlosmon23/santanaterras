@@ -11,10 +11,10 @@ interface ElegantImovelCardProps {
   showStats?: boolean;
 }
 
-export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({ 
-  imovel, 
+export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
+  imovel,
   className,
-  showStats = true 
+  showStats = true
 }) => {
   const tipoColors = {
     'Sítio': 'bg-green-100 text-green-800',
@@ -36,7 +36,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
           alt={imovel.titulo}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        
+
         {/* Overlay on Hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <div className="absolute bottom-4 left-4 right-4">
@@ -51,7 +51,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
             </div>
           </div>
         </div>
-        
+
         {/* Property Type Badge */}
         <div className="absolute top-4 left-4">
           <span className={cn(
@@ -61,7 +61,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
             {imovel.tipo}
           </span>
         </div>
-        
+
         {/* Featured Badge */}
         {imovel.destaque && (
           <div className="absolute top-4 right-4">
@@ -71,7 +71,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
           </div>
         )}
       </div>
-      
+
       {/* Content */}
       <div className="p-6">
         {/* Title and Location */}
@@ -84,12 +84,12 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
             <span>{imovel.localizacao.cidade}, {imovel.localizacao.estado}</span>
           </div>
         </div>
-        
+
         {/* Description */}
         <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
           {imovel.descricao}
         </p>
-        
+
         {/* Features */}
         {showStats && (
           <div className="flex items-center space-x-4 mb-4 pb-4 border-b border-gray-100">
@@ -107,11 +107,11 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
             )}
             <div className="flex items-center text-gray-500 text-sm">
               <Square className="w-4 h-4 mr-1" />
-              <span>{formatarArea(imovel.areaTotal)}</span>
+              <span>{formatarArea(imovel.areaTotal, imovel.unidadeArea)}</span>
             </div>
           </div>
         )}
-        
+
         {/* Price and CTA */}
         <div className="flex items-center justify-between">
           <div>
@@ -126,7 +126,7 @@ export const ElegantImovelCard: React.FC<ElegantImovelCardProps> = ({
               </div>
             )}
           </div>
-          
+
           <Link
             to={`/imovel/${imovel.slug}`}
             className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-xl font-semibold transition-all duration-200 hover:scale-105 active:scale-95"

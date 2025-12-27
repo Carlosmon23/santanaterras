@@ -46,17 +46,21 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contato</h4>
             <div className="space-y-3">
-              <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-red-500" />
-                <span className="text-gray-300">(19) 99999-9999</span>
+              <div className="flex items-start space-x-2">
+                <Phone className="w-5 h-5 text-red-500 mt-1 flex-shrink-0" />
+                <div className="flex flex-col space-y-1">
+                  <span className="text-gray-300">(15) 99708-1268</span>
+                  <span className="text-gray-300">(15) 99196-9082</span>
+                  <span className="text-gray-300">(15) 3262-3368</span>
+                </div>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-5 h-5 text-red-500" />
                 <span className="text-gray-300">contato@santanaterras.com.br</span>
               </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-5 h-5 text-red-500" />
-                <span className="text-gray-300">São Pedro - SP</span>
+              <div className="flex items-start space-x-2">
+                <MapPin className="w-5 h-5 text-red-500 mt-1 flex-shrink-0" />
+                <span className="text-gray-300">Av. Monsenhor Seckler, 1648 - Vila América - Porto Feliz/SP</span>
               </div>
             </div>
             

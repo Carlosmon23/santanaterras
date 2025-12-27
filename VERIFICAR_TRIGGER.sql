@@ -31,3 +31,4 @@ AND column_name ILIKE '%atualizacao%';
 -- UPDATE imoveis SET titulo = titulo WHERE id = (SELECT id FROM imoveis LIMIT 1);
 -- SELECT "dataAtualizacao" FROM imoveis LIMIT 1;
 
+

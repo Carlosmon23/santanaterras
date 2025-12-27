@@ -83,3 +83,4 @@ Após o deploy, verifique:
 - Verifique as configurações do Supabase
 - Certifique-se de que o domínio da Vercel está permitido no Supabase
 
+

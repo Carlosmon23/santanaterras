@@ -103,3 +103,4 @@ CREATE INDEX IF NOT EXISTS idx_imoveis_dataCriacao ON imoveis("dataCriacao" DESC
 -- WHERE table_name = 'imoveis'
 -- ORDER BY ordinal_position;
 
+

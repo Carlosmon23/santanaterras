@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { 
-  Search, 
-  Filter, 
-  MapPin, 
-  Bed, 
-  Bath, 
-  Square, 
+import {
+  Search,
+  Filter,
+  MapPin,
+  Bed,
+  Bath,
+  Square,
   DollarSign,
   Grid,
   List,
@@ -32,7 +32,7 @@ export const ElegantBuscaImoveis: React.FC = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'recente' | 'preco_menor' | 'preco_maior' | 'area'>('recente');
   const [categoriaSelecionada, setCategoriaSelecionada] = useState<CategoriaImovel | 'Todos'>('Todos');
-  
+
   // Filter states - apenas categoria, sem tipos específicos
   const [filtros, setFiltros] = useState<FiltrosBusca>({
     cidade: searchParams.get('localizacao') || '',
@@ -60,7 +60,7 @@ export const ElegantBuscaImoveis: React.FC = () => {
   const handleSortChange = (sort: typeof sortBy) => {
     setSortBy(sort);
     let sorted = [...resultados];
-    
+
     switch (sort) {
       case 'preco_menor':
         sorted.sort((a, b) => (a.preco || 0) - (b.preco || 0));
@@ -76,28 +76,28 @@ export const ElegantBuscaImoveis: React.FC = () => {
         sorted.sort((a, b) => b.dataCriacao.getTime() - a.dataCriacao.getTime());
         break;
     }
-    
+
     setResultados(sorted);
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <ElegantHeader />
-      
+
       {/* Hero Section */}
       <section className="relative h-[60vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url('${buscaHeroImage}')`
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
         </div>
-        
+
         <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif italic text-white mb-6">
-            Encontre sua 
+            Encontre sua
             <span className="block text-red-400">Propriedade dos Sonhos</span>
           </h1>
           <p className="text-xl text-gray-200 max-w-2xl mx-auto">
@@ -134,8 +134,8 @@ export const ElegantBuscaImoveis: React.FC = () => {
                     key={categoria}
                     onClick={() => {
                       setCategoriaSelecionada(categoria);
-                      setFiltros(prev => ({ 
-                        ...prev, 
+                      setFiltros(prev => ({
+                        ...prev,
                         categoria: [categoria]
                       }));
                     }}
@@ -152,7 +152,7 @@ export const ElegantBuscaImoveis: React.FC = () => {
                 ))}
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               {/* Sort Dropdown */}
               <div className="relative">
@@ -168,7 +168,7 @@ export const ElegantBuscaImoveis: React.FC = () => {
                 </select>
                 <ChevronDown className="absolute right-2 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
               </div>
-              
+
               {/* View Mode Toggle */}
               <div className="flex items-center bg-gray-100 rounded-lg p-1">
                 <button
@@ -214,14 +214,14 @@ export const ElegantBuscaImoveis: React.FC = () => {
           ) : (
             <div className={cn(
               'grid gap-8',
-              viewMode === 'grid' 
-                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+              viewMode === 'grid'
+                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
                 : 'grid-cols-1 lg:grid-cols-2'
             )}>
               {resultados.map((imovel) => (
-                <ElegantImovelCard 
-                  key={imovel.id} 
-                  imovel={imovel} 
+                <ElegantImovelCard
+                  key={imovel.id}
+                  imovel={imovel}
                   showStats={true}
                   className={viewMode === 'list' ? 'flex' : ''}
                 />

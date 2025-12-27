@@ -34,3 +34,4 @@ FROM information_schema.columns
 WHERE table_name = 'imoveis' 
 AND column_name LIKE '%area%';
 
+

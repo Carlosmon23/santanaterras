@@ -20,3 +20,4 @@ AND column_name ILIKE '%atualizacao%';
 -- 3. Se a coluna for "dataAtualizacao" (camelCase), o trigger deve funcionar
 -- Se for "dataatualizacao" (minúsculas), precisamos ajustar
 
+

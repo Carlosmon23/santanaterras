@@ -11,7 +11,8 @@ export interface Imovel {
     bairro: string;
     estado: string;
   };
-  areaTotal: number; // em m²
+  areaTotal: number; // em m² (sempre salvo em m² no banco)
+  unidadeArea?: UnidadeArea; // Unidade de preferência para exibição
   areaUtil?: number; // em m² (opcional)
   caracteristicas: {
     quartos: number;
@@ -38,10 +39,10 @@ export interface Imovel {
 export type CategoriaImovel = 'Rural' | 'Urbano' | 'Comercial' | 'Industrial';
 
 // Tipos de imóveis por categoria
-export type TipoImovel = 
+export type TipoImovel =
   // Rurais
   | 'Sítio'
-  | 'Chácara' 
+  | 'Chácara'
   | 'Fazenda'
   | 'Terreno Rural'
   // Urbanos
@@ -90,7 +91,7 @@ export const categoriaPorTipo: Record<TipoImovel, CategoriaImovel> = {
 
 export type StatusImovel = 'Rascunho' | 'Publicado' | 'Inativo';
 
-export type Comodidade = 
+export type Comodidade =
   | 'Piscina'
   | 'Poço Artesiano'
   | 'Churrasqueira'
@@ -114,6 +115,8 @@ export type Comodidade =
   | 'Área de Lazer'
   | 'Quadra Poliesportiva'
   | 'Aceita Permuta';
+
+export type UnidadeArea = 'm²' | 'alqueire' | 'hectare';
 
 export interface FiltrosBusca {
   categoria?: CategoriaImovel[];

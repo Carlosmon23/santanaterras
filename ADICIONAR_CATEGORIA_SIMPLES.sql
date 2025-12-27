@@ -37,3 +37,4 @@ SELECT categoria, COUNT(*) as total
 FROM imoveis
 GROUP BY categoria;
 
+

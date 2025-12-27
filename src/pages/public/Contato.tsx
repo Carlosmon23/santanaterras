@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
+import {
+  Phone,
+  Mail,
+  MapPin,
   Clock,
   MessageCircle,
   Send,
@@ -12,6 +12,7 @@ import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { useLeadStore } from '@/stores/leadStore';
+import { ElegantHeader } from '@/components/layout/ElegantHeader';
 
 export const Contato: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ export const Contato: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { addLead } = useLeadStore();
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -45,7 +46,7 @@ export const Contato: React.FC = () => {
     });
     setShowSuccess(true);
     setIsSubmitting(false);
-    
+
     // Limpar formulário após 3 segundos
     setTimeout(() => {
       setShowSuccess(false);
@@ -58,15 +59,16 @@ export const Contato: React.FC = () => {
       });
     }, 3000);
   };
-  
+
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <ElegantHeader />
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-red-600 to-red-700 text-white py-16">
+      <section className="bg-gradient-to-r from-red-600 to-red-700 text-white pt-32 pb-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Entre em Contato</h1>
           <p className="text-xl text-red-100 max-w-2xl mx-auto">
@@ -74,7 +76,7 @@ export const Contato: React.FC = () => {
           </p>
         </div>
       </section>
-      
+
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Information */}
@@ -90,12 +92,16 @@ export const Contato: React.FC = () => {
                 <div className="flex items-start gap-3">
                   <Phone className="w-5 h-5 text-red-600 mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-medium text-gray-900">Telefone</h3>
-                    <p className="text-gray-600">(19) 99999-9999</p>
+                    <h3 className="font-medium text-gray-900">Telefones</h3>
+                    <div className="flex flex-col text-gray-600">
+                      <span>(15) 99708-1268</span>
+                      <span>(15) 99196-9082</span>
+                      <span>(15) 3262-3368</span>
+                    </div>
                     <p className="text-sm text-gray-500">WhatsApp disponível</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Mail className="w-5 h-5 text-red-600 mt-1 flex-shrink-0" />
                   <div>
@@ -104,16 +110,17 @@ export const Contato: React.FC = () => {
                     <p className="text-sm text-gray-500">Resposta em até 24h</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-red-600 mt-1 flex-shrink-0" />
                   <div>
                     <h3 className="font-medium text-gray-900">Endereço</h3>
-                    <p className="text-gray-600">São Pedro - SP</p>
+                    <p className="text-gray-600">Av. Monsenhor Seckler, 1648</p>
+                    <p className="text-gray-600">Vila América - Porto Feliz/SP</p>
                     <p className="text-sm text-gray-500">Atendimento presencial com hora marcada</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Clock className="w-5 h-5 text-red-600 mt-1 flex-shrink-0" />
                   <div>
@@ -124,10 +131,10 @@ export const Contato: React.FC = () => {
                     <p className="text-sm text-gray-500">9h às 13h</p>
                   </div>
                 </div>
-                
+
                 {/* WhatsApp Button */}
                 <a
-                  href="https://wa.me/19999999999"
+                  href="https://wa.me/5515997081268"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium"
@@ -138,7 +145,7 @@ export const Contato: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Contact Form */}
           <div className="lg:col-span-2">
             <Card>
@@ -172,7 +179,7 @@ export const Contato: React.FC = () => {
                         required
                       />
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <Input
                         label="Telefone"
@@ -200,7 +207,7 @@ export const Contato: React.FC = () => {
                         </select>
                       </div>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Mensagem
@@ -214,7 +221,7 @@ export const Contato: React.FC = () => {
                         placeholder="Digite sua mensagem aqui..."
                       />
                     </div>
-                    
+
                     <Button
                       type="submit"
                       loading={isSubmitting}
@@ -228,7 +235,7 @@ export const Contato: React.FC = () => {
                 )}
               </CardContent>
             </Card>
-            
+
             {/* Additional Information */}
             <div className="mt-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">Por que escolher a Santana Terras?</h2>
@@ -236,31 +243,31 @@ export const Contato: React.FC = () => {
                 <div className="bg-white p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Experiência e Conhecimento</h3>
                   <p className="text-gray-600">
-                    Com anos de experiência no mercado de imóveis rurais, conhecemos profundamente 
+                    Com anos de experiência no mercado de imóveis rurais, conhecemos profundamente
                     cada região e as particularidades de cada tipo de propriedade.
                   </p>
                 </div>
-                
+
                 <div className="bg-white p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Atendimento Personalizado</h3>
                   <p className="text-gray-600">
-                    Cada cliente é único. Oferecemos um atendimento personalizado, entendendo 
+                    Cada cliente é único. Oferecemos um atendimento personalizado, entendendo
                     suas necessidades específicas para encontrar o imóvel ideal.
                   </p>
                 </div>
-                
+
                 <div className="bg-white p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Transparência e Segurança</h3>
                   <p className="text-gray-600">
-                    Trabalhamos com total transparência em todas as etapas do processo, 
+                    Trabalhamos com total transparência em todas as etapas do processo,
                     garantindo segurança e tranquilidade para nossos clientes.
                   </p>
                 </div>
-                
+
                 <div className="bg-white p-6 rounded-lg border">
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Suporte Completo</h3>
                   <p className="text-gray-600">
-                    Do primeiro contato à finalização da compra ou venda, oferecemos 
+                    Do primeiro contato à finalização da compra ou venda, oferecemos
                     suporte completo em todas as etapas do processo.
                   </p>
                 </div>

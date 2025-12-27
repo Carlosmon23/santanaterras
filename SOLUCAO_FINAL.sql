@@ -67,3 +67,4 @@ WHERE table_name = 'imoveis'
 AND column_name ILIKE '%area%'
 ORDER BY column_name;
 
+

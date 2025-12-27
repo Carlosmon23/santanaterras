@@ -39,10 +39,11 @@ const mapRowToImovel = (row: any): Imovel => {
     caracteristicas: row.caracteristicas || { quartos: 0, suites: 0, banheiros: 0 },
     comodidades: Array.isArray(row.comodidades) ? row.comodidades : [],
     fotos: Array.isArray(row.fotos) ? row.fotos : [],
+    unidadeArea: row.unidade_area || 'm²',
     fotoCapa: row.fotoCapa || '',
     preco: row.preco ?? null,
     precoExibicao: isValidPrecoExibicao(row.precoExibicao)
-      ? row.precoExibicao 
+      ? row.precoExibicao
       : formatarPreco(row.preco ?? null),
     visualizacoes: typeof row.visualizacoes === 'number' ? row.visualizacoes : 0,
     destaque: Boolean(row.destaque),
@@ -88,13 +89,13 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         .from('imoveis')
         .select('*')
         .order('dataCriacao', { ascending: false });
-      
+
       if (error) {
         console.error('Erro ao carregar imóveis:', error);
         set({ carregando: false, erro: error.message });
         return false;
       }
-      
+
       const rows = (data || []).map(mapRowToImovel);
       const { ordenados, destaque, recentes } = calcularListasDerivadas(rows);
       set({
@@ -116,35 +117,35 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
     set({ carregando: true, erro: null });
     try {
       console.log('🔵 [saveImovel] Iniciando salvamento...', { imovelId: imovel.id, titulo: imovel.titulo });
-      
+
       // Verificar sessão
       const { data: sessionData } = await supabase.auth.getSession();
-      console.log('🔵 [saveImovel] Sessão:', { 
-        hasSession: !!sessionData.session, 
-        userId: sessionData.session?.user?.id 
+      console.log('🔵 [saveImovel] Sessão:', {
+        hasSession: !!sessionData.session,
+        userId: sessionData.session?.user?.id
       });
-      
+
       if (!sessionData.session) {
         const errorMsg = 'Você não está autenticado. Faça login novamente.';
         console.error('❌ [saveImovel]', errorMsg);
         set({ carregando: false, erro: errorMsg });
         return false;
       }
-      
+
       const atual = get().imoveis;
       const exists = atual.some((i) => i.id === imovel.id);
       console.log('🔵 [saveImovel] Imóvel existe?', exists);
-      
+
       // Garantir que areaTotal sempre tenha um valor válido (mínimo 0)
-      const areaTotalValue = (imovel.areaTotal !== null && imovel.areaTotal !== undefined && imovel.areaTotal >= 0) 
-        ? imovel.areaTotal 
+      const areaTotalValue = (imovel.areaTotal !== null && imovel.areaTotal !== undefined && imovel.areaTotal >= 0)
+        ? imovel.areaTotal
         : 0;
-      
+
       console.log('🔵 [saveImovel] areaTotal original:', imovel.areaTotal, '-> processado:', areaTotalValue);
-      
+
       // Garantir que a categoria seja salva
       const categoria = imovel.categoria || obterCategoria(imovel.tipo);
-      
+
       const payload: any = {
         titulo: imovel.titulo,
         tipo: imovel.tipo,
@@ -156,6 +157,7 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
           : formatarPreco(imovel.preco ?? null),
         localizacao: imovel.localizacao || { cidade: '', bairro: '', estado: '' },
         areaTotal: areaTotalValue, // O Supabase vai mapear automaticamente para a coluna correta
+        unidade_area: imovel.unidadeArea || 'm²',
         areaUtil: imovel.areaUtil || null,
         caracteristicas: imovel.caracteristicas || { quartos: 0, suites: 0, banheiros: 0 },
         comodidades: imovel.comodidades || [],
@@ -168,9 +170,9 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         dataCriacao: (imovel.dataCriacao || new Date()).toISOString(),
         dataAtualizacao: new Date().toISOString(),
       };
-      
+
       console.log('🔵 [saveImovel] Payload preparado:', payload);
-      
+
       let response;
       if (exists) {
         console.log('🔵 [saveImovel] Atualizando imóvel existente...');
@@ -191,7 +193,7 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
           .select()
           .single();
       }
-      
+
       console.log('🔵 [saveImovel] Resposta completa:', {
         hasError: !!response.error,
         hasData: !!response.data,
@@ -207,10 +209,10 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
           hint: response.error.hint,
           code: response.error.code
         });
-        
+
         // Mensagens de erro mais específicas
         let errorMessage = response.error.message || 'Erro ao salvar imóvel';
-        
+
         if (response.error.code === 'PGRST116') {
           errorMessage = 'Tabela não encontrada. Execute o script SQL no Supabase primeiro.';
         } else if (response.error.code === '42501') {
@@ -227,7 +229,7 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         } else if (response.error.hint) {
           errorMessage = `${response.error.message} (${response.error.hint})`;
         }
-        
+
         set({
           carregando: false,
           erro: errorMessage,
@@ -243,7 +245,7 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
         });
         return false;
       }
-      
+
       console.log('✅ [saveImovel] Imóvel salvo com sucesso:', response.data);
 
       const salvo = mapRowToImovel(response.data);
@@ -273,13 +275,13 @@ export const useImovelStore = create<ImovelStore>((set, get) => ({
     set({ carregando: true, erro: null });
     try {
       const { error } = await supabase.from('imoveis').delete().eq('id', id);
-      
+
       if (error) {
         console.error('Erro ao deletar imóvel:', error);
         set({ carregando: false, erro: error.message });
         return false;
       }
-      
+
       const restantes = get().imoveis.filter((i) => i.id !== id);
       const { ordenados, destaque, recentes } = calcularListasDerivadas(restantes);
       set({

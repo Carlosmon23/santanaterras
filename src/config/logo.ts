@@ -14,3 +14,4 @@ export const logoUrl = 'https://alnyrhzrhsepweapunwx.supabase.co/storage/v1/obje
 // Alt text para acessibilidade
 export const logoAlt = 'Santana Terras';
 
+

@@ -12,32 +12,32 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   const isActive = (path: string) => location.pathname === path;
-  
+
   // Verificar se está na página de detalhes do imóvel
   const isImovelDetalhes = location.pathname.startsWith('/imovel/');
-  
+
   const menuItems = [
     { path: '/', label: 'Home' },
     { path: '/busca', label: 'Buscar' },
     { path: '/contato', label: 'Contato' },
   ];
-  
+
   // Se estiver na página de detalhes, sempre usar fundo branco sólido
-  const headerBg = isImovelDetalhes 
-    ? 'bg-white shadow-md' 
+  const headerBg = isImovelDetalhes
+    ? 'bg-white shadow-md'
     : (isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent');
-  
+
   return (
     <header className={cn(
       'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
@@ -45,23 +45,28 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
       className
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-24">
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <div className={cn(
-              'flex items-center justify-center rounded-lg px-1 py-0.5 transition-colors overflow-hidden',
-              isImovelDetalhes || isScrolled ? 'bg-white' : 'bg-white/90 backdrop-blur-sm'
+              'flex items-center justify-center transition-all duration-300',
+              isImovelDetalhes || isScrolled
+                ? 'bg-transparent'
+                : 'bg-white shadow-lg rounded-xl px-4 py-2'
             )}>
               <img
                 src={logoUrl}
                 alt={logoAlt}
-                className="h-24 w-auto"
+                className={cn(
+                  'w-auto object-contain transition-all duration-300',
+                  isImovelDetalhes || isScrolled ? 'h-20' : 'h-24'
+                )}
                 loading="eager"
                 decoding="async"
               />
             </div>
           </Link>
-          
+
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-10">
             {menuItems.map((item) => (
@@ -85,7 +90,7 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
               </Link>
             ))}
           </nav>
-          
+
           {/* Actions */}
           <div className="hidden lg:flex items-center space-x-4">
             <Link
@@ -101,7 +106,7 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
               <span>Admin</span>
             </Link>
           </div>
-          
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -113,7 +118,7 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
-        
+
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className={cn(

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  Save, 
-  Upload, 
+import {
+  ArrowLeft,
+  Save,
+  Upload,
   X,
   Plus,
   Trash2,
@@ -26,17 +26,20 @@ import { tiposImovel, comodidadesDisponiveis, categoriasImovel, tiposPorCategori
 import { CategoriaImovel } from '@/types/imovel';
 import { compressImage, getImageInfo } from '../../utils/imageCompression';
 
+const ALQUEIRE_M2 = 24200; // Alqueire Paulista
+const HECTARE_M2 = 10000;
+
 export const AdminImovelForm: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const { imoveis, saveImovel, loadImoveis, erro: erroStore } = useImovelStore();
-  
+
   const isEditing = !!id;
   const imovelExistente = id ? imoveis.find(i => i.id === id) : null;
-  
+
   const [categoriaSelecionada, setCategoriaSelecionada] = useState<CategoriaImovel>('Rural');
   const [tiposDisponiveis, setTiposDisponiveis] = useState<TipoImovel[]>(tiposPorCategoria.Rural);
-  
+
   const [formData, setFormData] = useState<Partial<Imovel>>({
     titulo: '',
     tipo: 'Sítio',
@@ -68,7 +71,7 @@ export const AdminImovelForm: React.FC = () => {
     visualizacoes: 0,
     slug: ''
   });
-  
+
   const [newPhoto, setNewPhoto] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -76,7 +79,7 @@ export const AdminImovelForm: React.FC = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccess, setUploadSuccess] = useState<string | null>(null);
-  
+
   // Monitorar erros do store
   useEffect(() => {
     if (erroStore) {
@@ -84,7 +87,7 @@ export const AdminImovelForm: React.FC = () => {
       setSubmitError(erroStore);
     }
   }, [erroStore]);
-  
+
   useEffect(() => {
     if (imovelExistente) {
       setFormData(imovelExistente);
@@ -93,7 +96,7 @@ export const AdminImovelForm: React.FC = () => {
       setTiposDisponiveis(tiposPorCategoria[categoria]);
     }
   }, [imovelExistente]);
-  
+
   // Atualizar tipos disponíveis quando categoria mudar
   useEffect(() => {
     setTiposDisponiveis(tiposPorCategoria[categoriaSelecionada]);
@@ -112,14 +115,14 @@ export const AdminImovelForm: React.FC = () => {
       loadImoveis();
     }
   }, [isEditing, imovelExistente, loadImoveis]);
-  
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
     }));
   };
-  
+
   const handleLocalizacaoChange = (field: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -129,7 +132,7 @@ export const AdminImovelForm: React.FC = () => {
       }
     }));
   };
-  
+
   const handleCaracteristicaChange = (field: string, value: number | boolean) => {
     setFormData(prev => ({
       ...prev,
@@ -139,7 +142,65 @@ export const AdminImovelForm: React.FC = () => {
       }
     }));
   };
-  
+
+  const [displayArea, setDisplayArea] = useState<string>('');
+
+  // Inicializar displayArea quando formData carregar
+  useEffect(() => {
+    if (formData.areaTotal !== undefined) {
+      if (formData.unidadeArea === 'hectare') {
+        setDisplayArea((formData.areaTotal / HECTARE_M2).toFixed(2).replace(/\.?0+$/, ''));
+      } else if (formData.unidadeArea === 'alqueire') {
+        setDisplayArea((formData.areaTotal / ALQUEIRE_M2).toFixed(2).replace(/\.?0+$/, ''));
+      } else {
+        setDisplayArea((formData.areaTotal || 0).toString());
+      }
+    }
+  }, [formData.areaTotal, formData.unidadeArea]);
+
+  const handleUnitChange = (unit: 'm²' | 'alqueire' | 'hectare') => {
+    let newDisplay = '';
+    const areaM2 = formData.areaTotal || 0;
+
+    if (unit === 'hectare') {
+      newDisplay = (areaM2 / HECTARE_M2).toFixed(4).replace(/\.?0+$/, '');
+    } else if (unit === 'alqueire') {
+      newDisplay = (areaM2 / ALQUEIRE_M2).toFixed(4).replace(/\.?0+$/, '');
+    } else {
+      newDisplay = areaM2.toString();
+    }
+
+    setDisplayArea(newDisplay);
+    setFormData(prev => ({ ...prev, unidadeArea: unit }));
+  };
+
+  const handleAreaValueChange = (val: string) => {
+    setDisplayArea(val);
+    const num = parseFloat(val);
+    if (isNaN(num)) {
+      if (val === '') {
+        setFormData(prev => ({ ...prev, areaTotal: 0 }));
+      }
+      return;
+    }
+
+    let areaM2 = 0;
+    const unit = formData.unidadeArea || 'm²';
+
+    if (unit === 'hectare') {
+      areaM2 = num * HECTARE_M2;
+    } else if (unit === 'alqueire') {
+      areaM2 = num * ALQUEIRE_M2;
+    } else {
+      areaM2 = num;
+    }
+
+    // Arredondar para evitar dízimas infinitas
+    areaM2 = Math.round(areaM2 * 100) / 100;
+
+    setFormData(prev => ({ ...prev, areaTotal: areaM2 }));
+  };
+
   const handlePrecoChange = (value: string) => {
     if (value === '') {
       setFormData(prev => ({
@@ -156,7 +217,7 @@ export const AdminImovelForm: React.FC = () => {
       }));
     }
   };
-  
+
   const handleComodidadeToggle = (comodidade: Comodidade) => {
     setFormData(prev => ({
       ...prev,
@@ -165,7 +226,7 @@ export const AdminImovelForm: React.FC = () => {
         : [...(prev.comodidades || []), comodidade]
     }));
   };
-  
+
   const addPhoto = () => {
     if (newPhoto.trim()) {
       setFormData(prev => ({
@@ -185,18 +246,18 @@ export const AdminImovelForm: React.FC = () => {
       setUploadError('Selecione arquivos e preencha o título do imóvel');
       return;
     }
-    
+
     setUploading(true);
     setUploadError(null);
     setUploadSuccess(null);
-    
+
     try {
       const slug = gerarSlug(formData.titulo);
       const bucket = 'imoveis';
       const urls: string[] = [];
       const errors: string[] = [];
       const compressionStats: string[] = [];
-      
+
       for (const file of Array.from(files)) {
         try {
           // Validar tipo de arquivo
@@ -204,50 +265,50 @@ export const AdminImovelForm: React.FC = () => {
             errors.push(`${file.name}: não é uma imagem válida`);
             continue;
           }
-          
+
           // Validar tamanho original (máximo 10MB antes da compressão)
           if (file.size > 10 * 1024 * 1024) {
             errors.push(`${file.name}: arquivo muito grande (máximo 10MB)`);
             continue;
           }
-          
+
           // Comprimir imagem antes do upload
           const originalSize = getImageInfo(file);
           console.log(`📸 Comprimindo ${file.name}... (${originalSize.sizeMB.toFixed(2)}MB)`);
-          
+
           const compressedFile = await compressImage(file, {
             maxSizeMB: 1, // Máximo 1MB após compressão
             maxWidthOrHeight: 1920, // Máximo 1920px na maior dimensão
             useWebWorker: true,
             quality: 0.85 // Qualidade 85% (boa qualidade visual)
           });
-          
+
           const compressedSize = getImageInfo(compressedFile);
           const reduction = ((1 - compressedSize.sizeMB / originalSize.sizeMB) * 100).toFixed(1);
           compressionStats.push(`${file.name}: ${originalSize.sizeMB.toFixed(2)}MB → ${compressedSize.sizeMB.toFixed(2)}MB (${reduction}% menor)`);
-          
+
           console.log(`✅ ${file.name} comprimida: ${originalSize.sizeMB.toFixed(2)}MB → ${compressedSize.sizeMB.toFixed(2)}MB (${reduction}% menor)`);
-          
+
           const fileName = `${Date.now()}-${compressedFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
           const path = `${slug}/${fileName}`;
-          
+
           const { error: uploadError } = await supabase.storage
             .from(bucket)
-            .upload(path, compressedFile, { 
+            .upload(path, compressedFile, {
               upsert: true,
               cacheControl: '3600',
             });
-          
+
           if (uploadError) {
             console.error(`Erro ao fazer upload de ${file.name}:`, uploadError);
             errors.push(`${file.name}: ${uploadError.message}`);
             continue;
           }
-          
+
           const { data: urlData } = supabase.storage
             .from(bucket)
             .getPublicUrl(path);
-          
+
           if (urlData?.publicUrl) {
             urls.push(urlData.publicUrl);
           }
@@ -256,27 +317,27 @@ export const AdminImovelForm: React.FC = () => {
           errors.push(`${file.name}: ${fileError.message || 'Erro desconhecido'}`);
         }
       }
-      
+
       if (urls.length > 0) {
-        setFormData(prev => ({ 
-          ...prev, 
-          fotos: [...(prev.fotos || []), ...urls], 
-          fotoCapa: prev.fotoCapa || urls[0] 
+        setFormData(prev => ({
+          ...prev,
+          fotos: [...(prev.fotos || []), ...urls],
+          fotoCapa: prev.fotoCapa || urls[0]
         }));
-        
+
         const successMsg = `${urls.length} foto(s) enviada(s) com sucesso!`;
-        const compressionMsg = compressionStats.length > 0 
+        const compressionMsg = compressionStats.length > 0
           ? `\n\n📊 Compressão: ${compressionStats.join('\n')}`
           : '';
         const errorMsg = errors.length > 0 ? `\n\n⚠️ ${errors.length} erro(s): ${errors.join('; ')}` : '';
-        
+
         setUploadSuccess(successMsg + compressionMsg + errorMsg);
       } else if (errors.length > 0) {
         setUploadError(`Falha ao fazer upload: ${errors.join('; ')}`);
       } else {
         setUploadError('Nenhuma foto foi enviada');
       }
-      
+
       setFiles(null);
     } catch (err: any) {
       console.error('Erro inesperado no upload:', err);
@@ -285,26 +346,26 @@ export const AdminImovelForm: React.FC = () => {
       setUploading(false);
     }
   };
-  
+
   const removePhoto = (index: number) => {
     setFormData(prev => ({
       ...prev,
       fotos: prev.fotos?.filter((_, i) => i !== index) || []
     }));
   };
-  
+
   const setCapaPhoto = (photo: string) => {
     setFormData(prev => ({
       ...prev,
       fotoCapa: photo
     }));
   };
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setSubmitError(null);
-    
+
     try {
       // Validações básicas
       if (!formData.titulo || formData.titulo.trim() === '') {
@@ -312,25 +373,25 @@ export const AdminImovelForm: React.FC = () => {
         setIsSubmitting(false);
         return;
       }
-      
+
       if (!formData.descricao || formData.descricao.trim() === '') {
         setSubmitError('A descrição do imóvel é obrigatória.');
         setIsSubmitting(false);
         return;
       }
-      
+
       if (!formData.areaTotal || formData.areaTotal <= 0) {
         setSubmitError('A área total do imóvel é obrigatória e deve ser maior que zero.');
         setIsSubmitting(false);
         return;
       }
-      
+
       if (!formData.localizacao?.cidade || formData.localizacao.cidade.trim() === '') {
         setSubmitError('A cidade é obrigatória.');
         setIsSubmitting(false);
         return;
       }
-      
+
       const slug = gerarSlug(formData.titulo || '');
       const now = new Date();
       const generatedId = isEditing
@@ -338,12 +399,12 @@ export const AdminImovelForm: React.FC = () => {
         : typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
           ? crypto.randomUUID()
           : `imovel-${Date.now()}`;
-      
+
       // Garantir que areaTotal sempre tenha um valor válido
       const areaTotalValue = formData.areaTotal && formData.areaTotal > 0 ? formData.areaTotal : 0;
-      
+
       const categoriaFinal = formData.categoria || categoriaSelecionada || obterCategoria(formData.tipo || 'Casa');
-      
+
       const imovelData: Imovel = {
         ...formData as Imovel,
         id: generatedId,
@@ -359,13 +420,13 @@ export const AdminImovelForm: React.FC = () => {
         descricao: formData.descricao || '',
         areaTotal: areaTotalValue,
       };
-      
+
       console.log('🔵 [AdminImovelForm] areaTotal value:', areaTotalValue);
-      
+
       console.log('🔵 [AdminImovelForm] Chamando saveImovel...', imovelData);
       const ok = await saveImovel(imovelData);
       console.log('🔵 [AdminImovelForm] Resultado do saveImovel:', { ok, erroStore });
-      
+
       if (ok) {
         console.log('✅ [AdminImovelForm] Salvamento bem-sucedido, redirecionando...');
         navigate('/admin/imoveis');
@@ -382,7 +443,7 @@ export const AdminImovelForm: React.FC = () => {
       setIsSubmitting(false);
     }
   };
-  
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -404,7 +465,7 @@ export const AdminImovelForm: React.FC = () => {
             </p>
           </div>
         </div>
-        
+
         <Button
           type="submit"
           form="imovel-form"
@@ -416,7 +477,7 @@ export const AdminImovelForm: React.FC = () => {
           {isEditing ? 'Atualizar' : 'Salvar'}
         </Button>
       </div>
-      
+
       {/* Form */}
       <form id="imovel-form" onSubmit={handleSubmit} className="space-y-6">
         {submitError && (
@@ -438,7 +499,7 @@ export const AdminImovelForm: React.FC = () => {
                 required
                 placeholder="Ex: Sítio com 20.000m² - Vista Panorâmica"
               />
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Categoria
@@ -461,7 +522,7 @@ export const AdminImovelForm: React.FC = () => {
                 </select>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -477,7 +538,7 @@ export const AdminImovelForm: React.FC = () => {
                   ))}
                 </select>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Status
@@ -493,7 +554,7 @@ export const AdminImovelForm: React.FC = () => {
                 </select>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -511,7 +572,7 @@ export const AdminImovelForm: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -524,7 +585,7 @@ export const AdminImovelForm: React.FC = () => {
                   placeholder="Ex: São Pedro"
                 />
               </div>
-              
+
               <Input
                 label="Bairro"
                 value={formData.localizacao?.bairro || ''}
@@ -532,7 +593,7 @@ export const AdminImovelForm: React.FC = () => {
                 required
                 placeholder="Ex: Zona Rural"
               />
-              
+
               <Input
                 label="Estado"
                 value={formData.localizacao?.estado || ''}
@@ -544,7 +605,7 @@ export const AdminImovelForm: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Characteristics */}
         <Card>
           <CardHeader>
@@ -563,7 +624,7 @@ export const AdminImovelForm: React.FC = () => {
                   min="0"
                 />
               </div>
-              
+
               <div className="relative">
                 <Bed className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
@@ -575,7 +636,7 @@ export const AdminImovelForm: React.FC = () => {
                   min="0"
                 />
               </div>
-              
+
               <div className="relative">
                 <Bath className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                 <Input
@@ -587,7 +648,7 @@ export const AdminImovelForm: React.FC = () => {
                   min="0"
                 />
               </div>
-              
+
               <Input
                 label="Vagas de Garagem"
                 type="number"
@@ -596,7 +657,7 @@ export const AdminImovelForm: React.FC = () => {
                 min="0"
               />
             </div>
-            
+
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="flex items-center space-x-2">
                 <input
@@ -607,7 +668,7 @@ export const AdminImovelForm: React.FC = () => {
                 />
                 <label className="text-sm font-medium text-gray-700">Sala de Estar</label>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -617,7 +678,7 @@ export const AdminImovelForm: React.FC = () => {
                 />
                 <label className="text-sm font-medium text-gray-700">Sala de Jantar</label>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -627,7 +688,7 @@ export const AdminImovelForm: React.FC = () => {
                 />
                 <label className="text-sm font-medium text-gray-700">Cozinha</label>
               </div>
-              
+
               <div className="flex items-center space-x-2">
                 <input
                   type="checkbox"
@@ -638,21 +699,43 @@ export const AdminImovelForm: React.FC = () => {
                 <label className="text-sm font-medium text-gray-700">Lavanderia</label>
               </div>
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <Square className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input
-                  label="Área Total (m²)"
-                  type="number"
-                  value={formData.areaTotal || 0}
-                  onChange={(e) => handleInputChange('areaTotal', parseInt(e.target.value) || 0)}
-                  className="pl-10"
-                  min="0"
-                  required
-                />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="relative col-span-1 md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Área e Unidade
+                </label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Square className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Input
+                      type="number"
+                      value={displayArea}
+                      onChange={(e) => handleAreaValueChange(e.target.value)}
+                      className="pl-10"
+                      min="0"
+                      step="0.01"
+                      placeholder="0"
+                      required
+                    />
+                  </div>
+                  <select
+                    value={formData.unidadeArea || 'm²'}
+                    onChange={(e) => handleUnitChange(e.target.value as any)}
+                    className="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-white"
+                  >
+                    <option value="m²">m²</option>
+                    <option value="hectare">Hectares</option>
+                    <option value="alqueire">Alqueires</option>
+                  </select>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  {formData.unidadeArea === 'm²' && 'Área em metros quadrados'}
+                  {formData.unidadeArea === 'hectare' && `≈ ${(formData.areaTotal || 0).toLocaleString('pt-BR')} m²`}
+                  {formData.unidadeArea === 'alqueire' && `≈ ${(formData.areaTotal || 0).toLocaleString('pt-BR')} m²`}
+                </p>
               </div>
-              
+
               <div className="flex items-center space-x-2 pt-6">
                 <input
                   type="checkbox"
@@ -668,7 +751,7 @@ export const AdminImovelForm: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Amenities */}
         <Card>
           <CardHeader>
@@ -692,7 +775,7 @@ export const AdminImovelForm: React.FC = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         {/* Description */}
         <Card>
           <CardHeader>
@@ -709,7 +792,7 @@ export const AdminImovelForm: React.FC = () => {
             />
           </CardContent>
         </Card>
-        
+
         {/* Photos */}
         <Card>
           <CardHeader>
@@ -744,7 +827,7 @@ export const AdminImovelForm: React.FC = () => {
                 Adicionar
               </Button>
             </div>
-            
+
             {formData.fotos && formData.fotos.length > 0 && (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {formData.fotos.map((foto, index) => (
@@ -759,11 +842,10 @@ export const AdminImovelForm: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setCapaPhoto(foto)}
-                          className={`p-2 rounded-lg ${
-                            formData.fotoCapa === foto 
-                              ? 'bg-red-600 text-white' 
-                              : 'bg-white text-gray-700 hover:bg-gray-100'
-                          }`}
+                          className={`p-2 rounded-lg ${formData.fotoCapa === foto
+                            ? 'bg-red-600 text-white'
+                            : 'bg-white text-gray-700 hover:bg-gray-100'
+                            }`}
                           title={formData.fotoCapa === foto ? 'Foto de capa' : 'Definir como capa'}
                         >
                           <Star className="w-4 h-4" />
@@ -782,7 +864,7 @@ export const AdminImovelForm: React.FC = () => {
                 ))}
               </div>
             )}
-            
+
             {formData.fotos && formData.fotos.length === 0 && (
               <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
                 <Upload className="w-12 h-12 text-gray-400 mx-auto mb-2" />
