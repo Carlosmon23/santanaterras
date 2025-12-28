@@ -119,7 +119,7 @@ export const ImovelDetalhes: React.FC = () => {
       <ElegantHeader />
 
       {/* Spacer para o header fixo */}
-      <div className="h-20"></div>
+      <div className="h-32"></div>
 
       {/* Breadcrumb */}
       <div className="bg-white border-b">
@@ -174,8 +174,8 @@ export const ImovelDetalhes: React.FC = () => {
                         key={index}
                         onClick={() => setCurrentImageIndex(index)}
                         className={`relative overflow-hidden rounded-lg ${currentImageIndex === index
-                            ? 'ring-2 ring-red-600'
-                            : 'hover:opacity-80'
+                          ? 'ring-2 ring-red-600'
+                          : 'hover:opacity-80'
                           }`}
                       >
                         <img
@@ -289,44 +289,79 @@ export const ImovelDetalhes: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Contact Card */}
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Phone className="w-5 h-5" />
-                  Entre em Contato
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-4">
-                    Tem interesse neste imóvel? Entre em contato conosco!
-                  </p>
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+              <div className="bg-gray-900 p-6 text-center">
+                <h3 className="text-xl font-serif text-white mb-2">Ficou Interessado?</h3>
+                <p className="text-gray-400 text-sm">Entre em contato agora mesmo para agendar uma visita.</p>
+              </div>
 
-                  <Button
-                    className="w-full mb-3"
-                    onClick={() => setShowContactForm(!showContactForm)}
-                  >
-                    <Phone className="w-4 h-4 mr-2" />
-                    Tenho Interesse
-                  </Button>
+              <div className="p-6 space-y-6">
+                {/* Botão de Destaque - WhatsApp Principal */}
+                <a
+                  href="https://wa.me/5515997081268"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-center w-full bg-green-600 hover:bg-green-700 text-white p-4 rounded-xl font-bold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
+                >
+                  <div className="bg-white/20 p-2 rounded-full mr-3 group-hover:scale-110 transition-transform">
+                    <Phone className="w-5 h-5" />
+                  </div>
+                  <div className="text-left leading-tight">
+                    <span className="block text-xs font-normal opacity-90">Falar Agora</span>
+                    <span className="block text-lg">WhatsApp</span>
+                  </div>
+                </a>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <Phone className="w-4 h-4 text-gray-400" />
-                      <span>(19) 99999-9999</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-4 h-4 text-gray-400" />
-                      <span>contato@santanaterras.com.br</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-gray-400" />
-                      <span>Visitações: Seg-Sex 9h-18h</span>
+                <div className="space-y-4">
+                  <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wider border-b pb-2">Outros Contatos</h4>
+
+                  <div className="grid gap-3">
+                    <a href="tel:15997081268" className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group border border-gray-100 hover:border-red-100">
+                      <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center mr-3 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="block text-xs text-gray-500 font-medium">Celular / WhatsApp</span>
+                        <span className="block text-gray-900 font-bold group-hover:text-red-700 font-mono">(15) 99708-1268</span>
+                      </div>
+                    </a>
+
+                    <a href="tel:15991969082" className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group border border-gray-100 hover:border-red-100">
+                      <div className="w-10 h-10 rounded-full bg-red-50 text-red-600 flex items-center justify-center mr-3 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="block text-xs text-gray-500 font-medium">Celular / WhatsApp</span>
+                        <span className="block text-gray-900 font-bold group-hover:text-red-700 font-mono">(15) 99196-9082</span>
+                      </div>
+                    </a>
+
+                    <a href="tel:1532623368" className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors group border border-gray-100 hover:border-red-100">
+                      <div className="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center mr-3 group-hover:bg-gray-600 group-hover:text-white transition-colors">
+                        <Phone className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="block text-xs text-gray-500 font-medium">Telefone Fixo</span>
+                        <span className="block text-gray-900 font-bold group-hover:text-gray-900 font-mono">(15) 3262-3368</span>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <span className="block text-xs text-gray-500 font-bold uppercase mb-1">Nosso Endereço</span>
+                      <span className="text-sm text-gray-700 leading-relaxed block">
+                        Av. Monsenhor Seckler, 1648<br />
+                        Vila América - Porto Feliz/SP
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {showContactForm && (
+                {showContactForm ? (
                   <form onSubmit={handleContactSubmit} className="space-y-3 pt-4 border-t">
                     <Input
                       type="text"
@@ -359,10 +394,24 @@ export const ImovelDetalhes: React.FC = () => {
                     <Button type="submit" className="w-full">
                       Enviar Mensagem
                     </Button>
+                    <button
+                      type="button"
+                      onClick={() => setShowContactForm(false)}
+                      className="w-full text-sm text-gray-500 hover:text-gray-700 mt-2"
+                    >
+                      Cancelar
+                    </button>
                   </form>
+                ) : (
+                  <button
+                    onClick={() => setShowContactForm(true)}
+                    className="w-full py-3 text-red-600 font-medium hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                  >
+                    Enviar e-mail para a imobiliária
+                  </button>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
 
             {/* Property Info Card */}
             <Card>

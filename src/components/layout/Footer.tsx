@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { logoUrl, logoAlt } from '@/config/logo';
+import webrapidaLogo from '../../assets/webrapida-logo.png';
 
 export const Footer: React.FC = () => {
   return (
@@ -20,12 +21,12 @@ export const Footer: React.FC = () => {
               />
             </div>
             <p className="text-gray-300 max-w-md">
-              Referência em imóveis rurais, com forte atuação também em imóveis urbanos. 
-              Oferecemos as melhores oportunidades de investimento e moradia no campo e na cidade, 
+              Referência em imóveis rurais, com forte atuação também em imóveis urbanos.
+              Oferecemos as melhores oportunidades de investimento e moradia no campo e na cidade,
               com segurança e transparência em cada negociação.
             </p>
           </div>
-          
+
           {/* Links Rápidos */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Links Rápidos</h4>
@@ -41,7 +42,7 @@ export const Footer: React.FC = () => {
               </Link>
             </nav>
           </div>
-          
+
           {/* Contato */}
           <div>
             <h4 className="text-lg font-semibold mb-4">Contato</h4>
@@ -63,7 +64,7 @@ export const Footer: React.FC = () => {
                 <span className="text-gray-300">Av. Monsenhor Seckler, 1648 - Vila América - Porto Feliz/SP</span>
               </div>
             </div>
-            
+
             {/* Botão WhatsApp */}
             <a
               href="https://wa.me/19999999999"
@@ -76,15 +77,27 @@ export const Footer: React.FC = () => {
             </a>
           </div>
         </div>
-        
+
         {/* Copyright */}
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center bg-gray-900 pb-2">
           <p className="text-gray-400">
             © 2024 Santana Terras. Todos os direitos reservados.
           </p>
-          <p className="text-gray-500 text-sm mt-1">
-            Desenvolvido com ❤️ para o melhor atendimento em imóveis rurais e urbanos
-          </p>
+          <div className="flex flex-col items-center justify-center mt-6 space-y-2">
+            <span className="text-gray-500 text-xs uppercase tracking-wider">Desenvolvido por</span>
+            <a
+              href="https://webrapida.com.br/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:opacity-80 transition-opacity"
+            >
+              <img
+                src={webrapidaLogo}
+                alt="Web Rápida - Criação de Sites"
+                className="h-8 w-auto opacity-70 hover:opacity-100 transition-opacity"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
