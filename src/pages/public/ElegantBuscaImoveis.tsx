@@ -23,6 +23,7 @@ import { formatarPreco, formatarArea } from '@/utils/helpers';
 import { cn } from '@/utils/helpers';
 import { categoriasImovel } from '@/constants/imovelOptions';
 import { buscaHeroImage } from '@/config/heroImages';
+import newHeroBg from '../../assets/hero-bg-new.jpg';
 
 export const ElegantBuscaImoveis: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -89,7 +90,7 @@ export const ElegantBuscaImoveis: React.FC = () => {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: `url('${buscaHeroImage}')`
+            backgroundImage: `url('${newHeroBg}')`
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>

@@ -22,14 +22,14 @@ import { Phone } from 'lucide-react';
 function App() {
   const { loadImoveis } = useImovelStore();
   const { checkAuth } = useAuthStore();
-  
+
   React.useEffect(() => {
     // Verificar autenticação ao carregar o app
     checkAuth();
     // Carregar imóveis
     loadImoveis();
   }, [checkAuth, loadImoveis]);
-  
+
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
@@ -48,7 +48,7 @@ function App() {
               <Footer />
             </div>
           } />
-          
+
           {/* Admin Routes */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={
@@ -68,7 +68,7 @@ function App() {
           </Route>
         </Routes>
         <a
-          href="https://wa.me/19999999999"
+          href="https://wa.me/5515997081268"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Falar no WhatsApp"
