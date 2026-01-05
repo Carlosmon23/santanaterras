@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Search, MapPin, Home as HomeIcon, ChevronDown, DollarSign } from 'lucide-react';
 import { cn } from '@/utils/helpers';
+import heroBg from '../../assets/hero-bg-new.jpg';
 
 interface HeroSectionProps {
   className?: string;
@@ -11,33 +12,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
   return (
     <section className={cn('relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden', className)}>
       {/* Background Image with Overlay */}
-      <div 
+      <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('https://trae-api-us.mchost.guru/api/ide/v1/text_to_image?prompt=Fazenda%20elegante%20com%20campo%20verde%2C%20c%C3%A9u%20azul%2C%20ch%C3%A1cara%20sofisticada%2C%20estilo%20campestre%20luxuoso%2C%20fazenda%20brasileira%2C%20natureza%20e%20agricultura%2C%20paisagem%20rural%20premium&image_size=landscape_16_9')`
+          backgroundImage: `url(${heroBg})`
         }}
       >
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent"></div>
       </div>
-      
+
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl">
           {/* Headline */}
           <div className="mb-8">
             <h1 className="text-4xl sm:text-5xl lg:text-7xl font-serif italic text-white mb-4 leading-tight">
-              Compre. Venda. 
+              Compre. Venda.
               <span className="block text-red-400">Desfrute.</span>
             </h1>
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-8">
               Imóveis Rurais com Excelência
             </h2>
             <p className="text-lg text-gray-200 max-w-2xl leading-relaxed">
-              Descubra sítios, chácaras e fazendas exclusivas no coração do Brasil. 
+              Descubra sítios, chácaras e fazendas exclusivas no coração do Brasil.
               Tradição e confiança em cada transação.
             </p>
           </div>
-          
+
           {/* Search Bar */}
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -50,7 +51,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
                   className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent outline-none transition-all"
                 />
               </div>
-              
+
               {/* Property Type */}
               <div className="relative">
                 <HomeIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -63,7 +64,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
               </div>
-              
+
               {/* Price Range */}
               <div className="relative">
                 <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -76,7 +77,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
                 </select>
                 <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 pointer-events-none" />
               </div>
-              
+
               {/* Search Button */}
               <Link
                 to="/busca"
@@ -87,7 +88,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
               </Link>
             </div>
           </div>
-          
+
           {/* Stats */}
           <div className="mt-8 grid grid-cols-3 gap-8 text-center">
             <div>
