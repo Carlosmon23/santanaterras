@@ -83,6 +83,7 @@ export const Footer: React.FC = () => {
           <p className="text-gray-400">
             © 2024 Santana Terras. Todos os direitos reservados.
           </p>
+          <p className="text-gray-400 text-sm mt-1">CRECI 30683-F</p>
           <div className="flex flex-col items-center justify-center mt-6 space-y-2">
             <span className="text-gray-500 text-xs uppercase tracking-wider">Desenvolvido por</span>
             <a

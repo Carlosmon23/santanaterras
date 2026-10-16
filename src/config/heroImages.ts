@@ -11,7 +11,6 @@
 // Imagens do Hero da Home (carrossel)
 export const heroImages = [
   // Substitua estas URLs pelas URLs das suas imagens do Supabase
-  'https://alnyrhzrhsepweapunwx.supabase.co/storage/v1/object/public/imoveis/hero/Sitio-em-Porto-Feliz.webp',
   'https://alnyrhzrhsepweapunwx.supabase.co/storage/v1/object/public/imoveis/hero/Haras-Cerquilho.webp',
   'https://alnyrhzrhsepweapunwx.supabase.co/storage/v1/object/public/imoveis/hero/chacara-Morada-Do-Sol.webp'
 ];
