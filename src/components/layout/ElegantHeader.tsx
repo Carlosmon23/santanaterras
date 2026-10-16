@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { User, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { cn } from '@/utils/helpers';
 import { logoUrl, logoAlt } from '@/config/logo';
 
@@ -46,7 +46,8 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
     )}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-24">
-          {/* Logo */}
+          {/* Logo + CRECI */}
+          <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center">
             <div className={cn(
               'flex items-center justify-center transition-all duration-300',
@@ -66,6 +67,17 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
               />
             </div>
           </Link>
+
+          {/* CRECI */}
+          <span className={cn(
+            'hidden xl:inline-flex items-center px-3 py-1 rounded-full border text-xs font-semibold tracking-[0.15em] uppercase transition-colors duration-300',
+            isImovelDetalhes || isScrolled
+              ? 'border-gray-300 text-gray-600'
+              : 'border-white/40 text-white/90 backdrop-blur-sm bg-white/10'
+          )}>
+            CRECI 30683-F
+          </span>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-10">
@@ -90,22 +102,6 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
               </Link>
             ))}
           </nav>
-
-          {/* Actions */}
-          <div className="hidden lg:flex items-center space-x-4">
-            <Link
-              to="/admin"
-              className={cn(
-                'flex items-center space-x-2 px-6 py-2.5 rounded-full font-medium transition-all',
-                isImovelDetalhes || isScrolled
-                  ? 'bg-gray-900 text-white hover:bg-gray-800'
-                  : 'bg-white/90 text-gray-900 hover:bg-white backdrop-blur-sm'
-              )}
-            >
-              <User className="w-4 h-4" />
-              <span>Admin</span>
-            </Link>
-          </div>
 
           {/* Mobile Menu Button */}
           <button
@@ -141,18 +137,12 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
                   {item.label}
                 </Link>
               ))}
-              <Link
-                to="/admin"
-                onClick={() => setIsMenuOpen(false)}
-                className={cn(
-                  'block px-4 py-3 rounded-lg font-medium transition-colors',
-                  isImovelDetalhes || isScrolled
-                    ? 'bg-gray-900 text-white hover:bg-gray-800'
-                    : 'bg-white/90 text-gray-900 hover:bg-white'
-                )}
-              >
-                Admin
-              </Link>
+              <p className={cn(
+                'pt-3 text-center text-xs font-semibold tracking-[0.15em] uppercase',
+                isImovelDetalhes || isScrolled ? 'text-gray-500' : 'text-white/70'
+              )}>
+                CRECI 30683-F
+              </p>
             </nav>
           </div>
         )}
