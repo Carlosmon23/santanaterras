@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { User, Menu, X } from 'lucide-react';
 import { cn } from '@/utils/helpers';
 import { logoUrl, logoAlt } from '@/config/logo';
 
@@ -103,6 +103,20 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
             ))}
           </nav>
 
+          {/* Login */}
+          <Link
+            to="/admin"
+            className={cn(
+              'hidden lg:flex items-center gap-1.5 text-sm font-medium transition-colors',
+              isImovelDetalhes || isScrolled
+                ? 'text-gray-500 hover:text-red-600'
+                : 'text-white/70 hover:text-white'
+            )}
+          >
+            <User className="w-4 h-4" />
+            <span>Login</span>
+          </Link>
+
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -137,6 +151,17 @@ export const ElegantHeader: React.FC<ElegantHeaderProps> = ({ className }) => {
                   {item.label}
                 </Link>
               ))}
+              <Link
+                to="/admin"
+                onClick={() => setIsMenuOpen(false)}
+                className={cn(
+                  'flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors',
+                  isImovelDetalhes || isScrolled ? 'text-gray-500 hover:text-red-600' : 'text-white/70 hover:text-white'
+                )}
+              >
+                <User className="w-4 h-4" />
+                Login
+              </Link>
               <p className={cn(
                 'pt-3 text-center text-xs font-semibold tracking-[0.15em] uppercase',
                 isImovelDetalhes || isScrolled ? 'text-gray-500' : 'text-white/70'
